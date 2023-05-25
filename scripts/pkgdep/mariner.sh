@@ -17,12 +17,10 @@ if [[ $ID == centos || $ID == rhel || $ID == rocky || $ID == mariner ]]; then
 		sudo tdnf-config-manager --enable "${enable[@]}"
 	fi
 fi
-
-sudo tdnf install -y gcc gcc-c++ make CUnit-devel libaio-devel openssl-devel \
+sudo tdnf install -y build-essential
+sudo tdnf install -y CUnit-devel libaio-devel openssl-devel \
 	libuuid-devel libiscsi-devel ncurses-devel json-c-devel libcmocka-devel \
 	clang clang-devel python3-pip
-sudo tdnf install -y glibc-devel
-sudo tdnf install -y build-essential
 sudo tdnf install -y meson
 # Minimal install
 # workaround for arm: ninja fails with dep on skbuild python module
@@ -46,7 +44,7 @@ pip3 install pyyaml
 # Additional dependencies for SPDK CLI 
 sudo tdnf install -y python3-pexpect
 # Additional dependencies for ISA-L used in compression
-sudo tdnf install -y autoconf automake libtool help2man
+sudo tdnf install -y help2man
 # Additional dependencies for DPDK
 sudo tdnf install -y nasm libnuma-devel
 # Additional dependencies for USDT
