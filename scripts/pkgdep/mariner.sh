@@ -26,9 +26,23 @@ sudo tdnf install -y meson
 # workaround for arm: ninja fails with dep on skbuild python module
 if [ "$(uname -m)" = "aarch64" ]; then
 	pip3 install scikit-build
+	sudo tdnf install -y cmake
+	mkdir -p /tmp/bin/
+	ln -s /usr/bin/cmake /tmp/bin/cmake > /dev/null 2>&1 || true
+	export PATH=/tmp/bin:$PATH
 fi
 
 sudo tdnf install -y python python3-devel
+#Create hard link to use in SPDK as python
+if [[ ! -e /usr/bin/python && -e /etc/alternatives/python3 ]]; then
+	ln -s /etc/alternatives/python3 /usr/bin/python
+fi
+# pip3, which is shipped with centos8 and rocky8, is currently providing faulty ninja binary
+# which segfaults at each run. To workaround it, upgrade pip itself and then use it for each
+# package - new pip will provide ninja at the same version but with the actually working
+# binary.
+pip3 install --upgrade pip
+#pip3() { /usr/local/bin/pip "$@"; }
 pip3 install ninja
 pip3 install meson
 pip3 install pyelftools
@@ -46,7 +60,10 @@ sudo tdnf install -y python3-pexpect
 # Additional dependencies for ISA-L used in compression
 sudo tdnf install -y help2man
 # Additional dependencies for DPDK
-sudo tdnf install -y nasm libnuma-devel
+if ![ "$(uname -m)" = "aarch64" ]; then
+	sudo tdnf install -y nasm
+fi
+sudo tdnf install -y libnuma-devel
 # Additional dependencies for USDT
 sudo tdnf install -y systemtap-sdt-devel
 if [[ $INSTALL_DEV_TOOLS == "true" ]]; then
