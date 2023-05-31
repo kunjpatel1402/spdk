@@ -60,7 +60,7 @@ sudo tdnf install -y python3-pexpect
 # Additional dependencies for ISA-L used in compression
 sudo tdnf install -y help2man
 # Additional dependencies for DPDK
-if ![ "$(uname -m)" = "aarch64" ]; then
+if ! [[ "$(uname -m)" = "aarch64" ]]; then
 	sudo tdnf install -y nasm
 fi
 sudo tdnf install -y libnuma-devel
