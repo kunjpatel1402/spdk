@@ -41,7 +41,7 @@ fi
 # which segfaults at each run. To workaround it, upgrade pip itself and then use it for each
 # package - new pip will provide ninja at the same version but with the actually working
 # binary.
-pip3 install --upgrade pip
+#pip3 install --upgrade pip
 #pip3() { /usr/local/bin/pip "$@"; }
 pip3 install ninja
 pip3 install meson
