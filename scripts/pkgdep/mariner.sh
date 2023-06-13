@@ -3,6 +3,10 @@
 
 is_repo() { sudo tdnf repolist --all | grep -q "^$1"; }
 
+additional_dependencies() {
+	# Additional dependencies for SPDK CLI 
+	sudo tdnf install -y python3-pexpect;
+}
 
 if [[ $ID == centos || $ID == rhel || $ID == rocky || $ID == mariner ]]; then
 	repos=() enable=("epel" "elrepo" "elrepo-testing") add=()
@@ -33,7 +37,6 @@ if [ "$(uname -m)" = "aarch64" ]; then
 fi
 
 sudo tdnf install -y python python3-devel
-#Create hard link to use in SPDK as python
 if [[ ! -e /usr/bin/python && -e /etc/alternatives/python3 ]]; then
 	ln -s /etc/alternatives/python3 /usr/bin/python
 fi
@@ -55,8 +58,8 @@ if ! [[ $ID == centos && $VERSION_ID == 7 ]]; then
 fi
 pip3 install pyyaml
 
-# Additional dependencies for SPDK CLI 
-sudo tdnf install -y python3-pexpect
+additional_dependencies
+
 # Additional dependencies for ISA-L used in compression
 sudo tdnf install -y help2man
 # Additional dependencies for DPDK
