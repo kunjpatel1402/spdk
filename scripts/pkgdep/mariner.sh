@@ -3,12 +3,11 @@
 #  SPDX-License-Identifier: BSD-3-Clause
 #  All rights reserved.
 
-
 is_repo() { sudo tdnf repolist --all | grep -q "^$1"; }
 
 additional_dependencies() {
 	# Additional dependencies for SPDK CLI
-	sudo tdnf install -y python3-pexpect;
+	sudo tdnf install -y python3-pexpect
 	# Additional dependencies for ISA-L used in compression
 	sudo tdnf install -y help2man
 	# Additional dependencies for DPDK
@@ -21,7 +20,7 @@ additional_dependencies() {
 	if [[ $INSTALL_DEV_TOOLS == "true" ]]; then
 		# Tools for developers
 		devtool_pkgs=(git sg3_utils pciutils bash-completion ruby-devel)
-		devtool_pkgs+=( gcovr python3-pycodestyle)
+		devtool_pkgs+=(gcovr python3-pycodestyle)
 		sudo tdnf install -y "${devtool_pkgs[@]}"
 	fi
 	if [[ $INSTALL_PMEM == "true" ]]; then
