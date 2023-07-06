@@ -1179,9 +1179,16 @@ if [[ $arch == x86_64* ]] || [[ $arch == aarch64* ]]; then
 			echo "WARNING: ISA-L & DPDK crypto cannot be used as nasm ver must be 2.14 or newer."
 		fi
 	fi
+	if [[ -e /etc/os-release ]]; then
+		source /etc/os-release
+	fi
 	# check gas version on aarch64
 	if [[ $arch == aarch64* ]]; then
-		ver=$(as --version 2> /dev/null | awk 'NR==1{print $7}')
+		if [[ $ID == "mariner" ]]; then
+			ver=$(as --version 2> /dev/null | awk 'NR==1{print $5}')
+		else
+			ver=$(as --version 2> /dev/null | awk 'NR==1{print $7}')
+		fi
 		if lt "$ver" 2.24; then
 			# ISA-L, compression & crypto require gas version 2.24 or newer.
 			CONFIG[ISAL]=n
